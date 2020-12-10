@@ -1,196 +1,79 @@
-// import React, { Component } from "react";
-// import Person from "./components/Person/Person";
-
-// class App extends Component {
-//   state = {
-//     persons: [
-//       { id:"sdaf", name: "Julio", age: 41 },
-//       { id:"sfsd", name: "Mila", age: 33 }
-//     ],
-//     showPerson: false,
-//   };
-
-//   onChange = (event, id) => {
-//     const personIndex = this.state.persons.findIndex((p) => {
-//       return p.id === id
-//     })
-
-//     const person = {
-//       ...this.state.persons[personIndex]
-//     }
-//     person.name = event.target.value
-
-//     const persons = [...this.state.persons]
-//     persons[personIndex] = person
-
-    
-//     this.setState({
-//       persons: persons,
-//     });
-//   };
-
-//   togglePerson = () => {
-//     const doesShow = this.state.showPerson;
-//     console.log("doesShow: " + this.state.showPerson)
-//     this.setState({
-//       showPerson: !doesShow
-//     });
-    
-//   };
-
-//   deletePerson = (i) => {
-//     // const persons = this.state.persons
-//     const persons = [...this.state.persons];
-
-//     persons.splice(i, 1);
-//     this.setState({persons: persons})
-
-//   }
-
-//   render() {
-//     const style = {
-//       backgroundColor: 'white',
-//       font: 'inherit',
-//       border: '1px solid blue',
-//       padding: '8px',
-//       cursos: 'pointer'
-//     }
-//     let persons = null;
-
-//     if ( this.state.showPerson ) {
-//       console.log(persons)
-//       persons = (
-//         <div>{this.state.persons.map((e,i) => {
-//           return <Person
-//           click={() => this.deletePerson(i)}
-//           // click={this.deletePerson.bind(this, i)}
-//           name={e.name}
-//           age={e.age}
-//           key={e.id}
-//           onChange={(event) => this.onChange(event, e.id)}
-//         />
-//         })}
-            
-//           </div>
-//       )
-//     }
-
-
-//     return (
-//       <div>
-//         Welcome to my React App
-        
-          
-        
-//         <Person />
-//         <button style={style} onClick={this.togglePerson}>Show something</button>
-        
-//         {persons}
-//       </div>
-//     );
-//   }
-// }
-
-// export default App;
-
-
-
-import React , { Component, setState } from 'react';
+import React, { Component } from 'react';
 import Person from './components/Person/Person';
 import CharComp from './components/CharComp/CharComp';
 
 class App extends Component {
+
   state = {
-    text:'',
-    textLength:0
-  }
-  onChange = (event) => {
-    console.log(event.target.value.length);
-
-  
-    this.setState({
-      text: event.target.value,
-      textLength: event.target.value.length
-    })
+    expand: 0,
+    list: '',
+    input: '',
+    inputLength: 0
   }
 
-  onClick = () => {
+  handleButton = () => {
     console.log('clicked')
-    
-  }
-
-  deleteChar = (i) => {
-    console.log('delete char', i)
-    console.log(this.state.text[i])
-
-    const newArr = [...this.state.text]
-    console.log(newArr)
-    newArr.splice(i,1)
-    console.log(newArr)
-
-    this.setState({
-      text : newArr
-    })
-  
-    
-
-  }
- 
-  render () {
-
-    const validateLength = () => {
-    if (this.state.textLength < 5) {
-        console.log('not enuf')
-        return (
-          <h1>Not Enough!!!!</h1>
-        )
-      }
-    }
-    const style = {
-      display:"inline-block",
-      padding:"20px",
-      
-        backgroundColor:'lightBlue',
-        fontColor:'white',
-        margin:'30px',
-        fontSize:'20px',
-        border:'10px solid black'
-    }
-    let chars = ''
-    {
-      if (this.state.textLength > 0 ) {
-        // chars = [...this.state.text]
-        chars = (
-          <div>
-            {[...this.state.text].map((e,i) => {
-              return <CharComp letter={e} style={style} onClick={()=>this.deleteChar(i)}/>
-            })}
-          </div>
-        )
-        console.log(this.state.text)
-
-        // return (
-        //   <CharComp onClick={()=>this.deleteChar()} style={style} letter={this.state.text} />
-        // )
-      }
-
-    }
    
+    // when button clicked, a list of assignment will show in CharComp
+    if (this.state.expand === 0 ) {
+      this.state.expand = 1;
+      this.setState({
+        list: [
+          'Create an input field (in App component) with a change listener which outputs the length of the entered text below it(e.g in a paragraph)',
+          'Create a new Component (=> Validation Component which  receives the text length as a prop',
+          'inside the ValidationComponent, either output "Text too short" or "Text too long" dependingon the text length (min 5)',
+          'Create another component (=> CharComponent) and style it ',
+          'Render a list of CharComp where each Char receives a different letter of the entered text',
+          'When you click a Char, it should be removed from entered Text'
+        ]
+      })
+    } else {
+      this.state.expand = 0;
+      this.setState({
+        list: ''
+      })
+    }
+
+    console.log(this.state.expand)
+    // const copyList = [...this.state.list]
+    // console.log(copyList)
     
+  }
+
+  handleChange = (e) => {
+    console.log(e.target.value)
+    this.setState({
+      input: e.target.value,
+      inputLength: e.target.value.length
+    })
+  }
+
+  render() {
+
     return (
       <div>
-        <button onClick={this.onClick}>Click here for more</button>
-        <Person 
-        warning={validateLength()} 
-        length={this.state.textLength} 
-        text={this.state.text} 
-        change={(event)=> this.onChange(event)} 
-        />
-      {/* <CharComp onClick={(event)=>this.deleteChar(event)} style={style}
-      letter={this.state.text} /> */}
-      {chars}
+        <h1>Welcome to my React App</h1>
+        <Person toggle={this.state.expand} data={this.state.list} onClick={()=>this.handleButton()} />
+        
+        
+        <ul>
+            {[...this.state.list].map((e)=> {
+            return (
+            <li>{e}</li>
+            )
+          })}
+        </ul>
+        <hr />
+        <h2>Solutions:</h2>
+        Your Name:      <input onChange={(e)=>this.handleChange(e)} value={this.state.input}/>
+        <br />        
+        Character Length: {this.state.inputLength}
+        {(this.state.inputLength < 5) ? 
+          <h4>Not Enuf</h4> :
+          <h3>Password Sufficient</h3>
+        }
 
-      
+        <CharComp letter={this.state.input} /> 
       </div>
     )
   }
